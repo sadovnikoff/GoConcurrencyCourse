@@ -6,6 +6,10 @@ type Query struct {
 	arg2 string
 }
 
+func NewQuery(cmd, arg1, arg2 string) Query {
+	return Query{cmd, arg1, arg2}
+}
+
 func (q *Query) Command() string {
 	return q.cmd
 }

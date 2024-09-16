@@ -2,6 +2,7 @@ package engine
 
 import (
 	"errors"
+
 	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
 	"sadovnikoff/go_concurrency_cource/homework_1/internal/database/storage"
 )

@@ -39,20 +39,20 @@ func (p *Parser) Parse(request string) (Query, error) {
 		return Query{}, errInvalidRequest
 	}
 
-	query := Query{}
+	var query Query
 	switch tokens[0] {
 	case GetCommand, DelCommand:
 		if len(tokens) != 2 {
 			p.logger.DLog.Printf("%s [%s]", errInvalidArguments.Error(), request)
 			return Query{}, errInvalidArguments
 		}
-		query = Query{tokens[0], tokens[1], ""}
+		query = NewQuery(tokens[0], tokens[1], "")
 	case SetCommand:
 		if len(tokens) != 3 {
 			p.logger.DLog.Printf("%s [%s]", errInvalidArguments.Error(), request)
 			return Query{}, errInvalidArguments
 		}
-		query = Query{tokens[0], tokens[1], tokens[2]}
+		query = NewQuery(tokens[0], tokens[1], tokens[2])
 	default:
 		p.logger.DLog.Printf("%s [%s]", errInvalidCommand.Error(), request)
 		return Query{}, errInvalidCommand
