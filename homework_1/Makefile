@@ -2,10 +2,10 @@
 CLI_APP_NAME=database-cli
 
 build-cli:
-	go build -o ${CLI_APP_NAME} cmd/cli/main.go
+	go build -o bin/${CLI_APP_NAME} cmd/cli/main.go
 
 run-cli: build-cli
-	./${CLI_APP_NAME} $(ARGS)
+	./bin/${CLI_APP_NAME} $(ARGS)
 
 test:
 	go test ./...
