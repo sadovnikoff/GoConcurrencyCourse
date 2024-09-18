@@ -2,8 +2,6 @@ package storage
 
 import (
 	"errors"
-	"reflect"
-
 	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
 )
 
@@ -21,7 +19,7 @@ type Storage struct {
 }
 
 func NewStorage(engine Engine, logger *common.Logger) (*Storage, error) {
-	if engine == nil || reflect.ValueOf(engine).IsNil() {
+	if engine == nil {
 		return nil, errors.New("engine is invalid")
 	}
 

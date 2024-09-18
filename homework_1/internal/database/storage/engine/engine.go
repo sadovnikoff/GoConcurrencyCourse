@@ -22,12 +22,13 @@ func NewEngine(logger *common.Logger) (*Engine, error) {
 
 func (e *Engine) Set(key, value string) {
 	e.DB[key] = value
-	e.logger.ILog.Printf("successfull SET query [key %s, value %s]", key, value)
+	e.logger.DLog.Printf("successfull SET query [key %s, value %s]", key, value)
 }
 
 func (e *Engine) Get(key string) (string, error) {
 	value, ok := e.DB[key]
 	if !ok {
+		e.logger.DLog.Printf("GET query [key %s, value %s]: key not found", key, value)
 		return "", storage.ErrNotFound
 	}
 
@@ -37,5 +38,5 @@ func (e *Engine) Get(key string) (string, error) {
 
 func (e *Engine) Del(key string) {
 	delete(e.DB, key)
-	e.logger.ILog.Printf("successfull DEL query [key %s]", key)
+	e.logger.DLog.Printf("successfull DEL query [key %s]", key)
 }

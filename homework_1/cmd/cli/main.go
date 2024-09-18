@@ -66,6 +66,6 @@ func main() {
 			continue
 		}
 
-		logger.ILog.Println(response)
+		logger.DLog.Println(response)
 	}
 }

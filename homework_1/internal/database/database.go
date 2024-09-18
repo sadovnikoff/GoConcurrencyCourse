@@ -3,8 +3,6 @@ package database
 import (
 	"errors"
 	"fmt"
-	"reflect"
-
 	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
 	"sadovnikoff/go_concurrency_cource/homework_1/internal/database/compute"
 )
@@ -26,11 +24,11 @@ type Database struct {
 }
 
 func NewDatabase(computeLayer computeLayer, storageLayer storageLayer, logger *common.Logger) (*Database, error) {
-	if computeLayer == nil || reflect.ValueOf(computeLayer).IsNil() {
+	if computeLayer == nil {
 		return nil, errors.New("compute is invalid")
 	}
 
-	if storageLayer == nil || reflect.ValueOf(storageLayer).IsNil() {
+	if storageLayer == nil {
 		return nil, errors.New("storage is invalid")
 	}
 
@@ -68,6 +66,8 @@ func (d *Database) HandleQuery(request string) (string, error) {
 	case compute.DelCommand:
 		d.storageLayer.Del(query.KeyArgument())
 		response = fmt.Sprintf("[ok]")
+	default:
+		return "", errors.New("unknown command")
 	}
 
 	return response, nil

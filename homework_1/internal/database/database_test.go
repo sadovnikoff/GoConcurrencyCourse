@@ -12,8 +12,8 @@ func TestNewDatabase(t *testing.T) {
 	tests := []struct {
 		name           string
 		logger         *common.Logger
-		computeLayer   *MockComputeLayer
-		storageLayer   *MockStorageLayer
+		computeLayer   computeLayer
+		storageLayer   storageLayer
 		expectedError  error
 		expectedNilObj bool
 	}{

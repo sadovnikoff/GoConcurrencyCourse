@@ -11,7 +11,7 @@ func TestNewStorage(t *testing.T) {
 	tests := []struct {
 		name           string
 		logger         *common.Logger
-		engine         *MockEngine
+		engine         Engine
 		expectedError  error
 		expectedNilObj bool
 	}{
