@@ -3,8 +3,8 @@ package database
 import (
 	"errors"
 	"fmt"
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/database/compute"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/compute"
 )
 
 type computeLayer interface {

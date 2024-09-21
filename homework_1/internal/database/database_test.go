@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/database/compute"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/compute"
 )
 
 func TestNewDatabase(t *testing.T) {

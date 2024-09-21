@@ -3,7 +3,7 @@ package database
 import (
 	"errors"
 
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/database/compute"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/compute"
 )
 
 // MockComputeLayer is mock of ComputeLayer interface

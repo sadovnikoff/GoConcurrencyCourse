@@ -3,8 +3,8 @@ package engine
 import (
 	"errors"
 
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/database/storage"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/storage"
 )
 
 type Engine struct {

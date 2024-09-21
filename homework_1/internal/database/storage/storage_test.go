@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"sadovnikoff/go_concurrency_cource/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
 )
 
 func TestNewStorage(t *testing.T) {
