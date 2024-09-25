@@ -2,15 +2,15 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"log"
-	"net"
 	"os"
+	"syscall"
 	"time"
 
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/network/tcp"
 )
 
 func main() {
@@ -19,25 +19,11 @@ func main() {
 	maxBufSize := flag.String("max_message_size", "4KB", "Max message size for connection")
 	flag.Parse()
 
-	bufSize, err := common.ParseBufSize(*maxBufSize)
+	client, err := tcp.NewClient(*addr, *maxBufSize, *idleTimeout)
 	if err != nil {
-		fmt.Println("Error parsing maxBufSize:", err)
-		return
+		log.Fatal(err)
 	}
-
-	conn, err := net.Dial("tcp", *addr)
-	if err != nil {
-		fmt.Println("Error connecting to server:", err)
-		return
-	}
-	defer func() { _ = conn.Close() }()
-
-	if *idleTimeout != 0 {
-		if err := conn.SetDeadline(time.Now().Add(*idleTimeout)); err != nil {
-			fmt.Println("Failed to set deadline for connection:", err)
-			return
-		}
-	}
+	defer client.Close()
 
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Println("Type a command with arguments and press Enter (available commands: SET, GET, DEL).")
@@ -48,22 +34,13 @@ func main() {
 			log.Printf("Error reading request: %s", err)
 		}
 
-		_, err = conn.Write([]byte(request))
-		if err != nil {
-			fmt.Println("Error sending request:", err)
-			return
+		response, err := client.Communicate(request)
+		if errors.Is(err, syscall.EPIPE) {
+			log.Fatal("broken pipe (EPIPE): ", err)
+		} else if err != nil {
+			log.Println(err)
 		}
 
-		response := make([]byte, bufSize)
-		count, err := conn.Read(response)
-		if err != nil && err != io.EOF {
-			fmt.Println("Error reading server response:", err)
-			break
-		} else if count == bufSize {
-			fmt.Println("Error reading server response: too small buffer size")
-			break
-		}
-
-		fmt.Println(string(response[:count]))
+		fmt.Println(string(response))
 	}
 }

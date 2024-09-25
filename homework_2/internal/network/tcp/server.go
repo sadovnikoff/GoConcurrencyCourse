@@ -13,8 +13,9 @@ import (
 )
 
 const (
-	defaultIdleTimeout = 300 * time.Second
-	defaultBufSize     = 4096
+	defaultIdleTimeout    = 300 * time.Second
+	defaultBufSize        = 4096
+	defaultMaxConnections = 100
 )
 
 type database interface {
@@ -26,11 +27,10 @@ type Server struct {
 	lis       net.Listener
 	semaphore *concurrency.Semaphore
 
-	db             database
-	logger         *common.Logger
-	idleTimeout    time.Duration
-	bufferSize     int
-	maxConnections int
+	db          database
+	logger      *common.Logger
+	idleTimeout time.Duration
+	bufferSize  int
 }
 
 // NewServer - returns *Server
@@ -62,15 +62,19 @@ func NewServer(cfg *common.Config, db database, logger *common.Logger) (*Server,
 		bufSize = defaultBufSize
 	}
 
+	maxConnections := cfg.Network.MaxConnections
+	if maxConnections == 0 {
+		maxConnections = defaultMaxConnections
+	}
+
 	srv := &Server{
 		lis:       listener,
-		semaphore: concurrency.NewSemaphore(cfg.Network.MaxConnections),
+		semaphore: concurrency.NewSemaphore(maxConnections),
 
-		db:             db,
-		logger:         logger,
-		idleTimeout:    timeout,
-		maxConnections: cfg.Network.MaxConnections,
-		bufferSize:     bufSize,
+		db:          db,
+		logger:      logger,
+		idleTimeout: timeout,
+		bufferSize:  bufSize,
 	}
 
 	return srv, nil
@@ -97,19 +101,10 @@ func (s *Server) Run() {
 			continue
 		}
 
-		if s.idleTimeout != 0 {
-			if err := conn.SetDeadline(time.Now().Add(s.idleTimeout)); err != nil {
-				s.logger.Error("failed to set deadline %s", err.Error())
-				return
-			}
-		}
-
 		s.semaphore.Acquire()
-		s.logger.Debug("semaphore has been acquired")
 		go func(conn net.Conn) {
 			defer func() {
 				s.semaphore.Release()
-				s.logger.Debug("semaphore has been released")
 			}()
 
 			s.handle(conn)
@@ -126,6 +121,13 @@ func (s *Server) handle(conn net.Conn) {
 
 	request := make([]byte, s.bufferSize)
 	for {
+		if s.idleTimeout != 0 {
+			if err := conn.SetDeadline(time.Now().Add(s.idleTimeout)); err != nil {
+				s.logger.Error("failed to set deadline %s", err.Error())
+				return
+			}
+		}
+
 		count, err := conn.Read(request)
 		if err != nil && err != io.EOF {
 			s.logger.Error("failed to read request: %s", err.Error())
