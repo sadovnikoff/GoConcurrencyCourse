@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/storage"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/database/storage"
 )
 
 func TestNewEngine(t *testing.T) {
@@ -21,8 +21,11 @@ func TestNewEngine(t *testing.T) {
 			expectedError:     errors.New("logger is invalid"),
 		},
 		{
-			name:              "New engine with logger",
-			logger:            common.NewLogger(),
+			name: "New engine with logger",
+			logger: func() *common.Logger {
+				logger, _ := common.NewLogger("", "")
+				return logger
+			}(),
 			expectedNilEngine: false,
 			expectedError:     nil,
 		},
@@ -70,7 +73,8 @@ func TestEngine_Set(t *testing.T) {
 		},
 	}
 
-	engine, err := NewEngine(common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	engine, err := NewEngine(logger)
 	if err != nil {
 		t.Errorf("want %+v; got %+v", nil, err)
 	}
@@ -104,7 +108,8 @@ func TestEngine_Get(t *testing.T) {
 		},
 	}
 
-	engine, err := NewEngine(common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	engine, err := NewEngine(logger)
 	if err != nil {
 		t.Errorf("want %+v; got %+v", nil, err)
 	}
@@ -137,7 +142,8 @@ func TestEngine_Del(t *testing.T) {
 		},
 	}
 
-	engine, err := NewEngine(common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	engine, err := NewEngine(logger)
 	if err != nil {
 		t.Errorf("want %+v; got %+v", nil, err)
 	}

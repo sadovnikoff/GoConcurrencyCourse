@@ -2,7 +2,8 @@ package storage
 
 import (
 	"errors"
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
 )
 
 var ErrNotFound = errors.New("storage: requested data not found")

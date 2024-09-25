@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
 )
 
 func TestNewStorage(t *testing.T) {
@@ -16,9 +16,12 @@ func TestNewStorage(t *testing.T) {
 		expectedNilObj bool
 	}{
 		{
-			name:           "New storage without engine",
-			engine:         nil,
-			logger:         common.NewLogger(),
+			name:   "New storage without engine",
+			engine: nil,
+			logger: func() *common.Logger {
+				logger, _ := common.NewLogger("", "")
+				return logger
+			}(),
 			expectedError:  errors.New("engine is invalid"),
 			expectedNilObj: true,
 		},
@@ -29,9 +32,12 @@ func TestNewStorage(t *testing.T) {
 			expectedNilObj: true,
 		},
 		{
-			name:           "New valid storage",
-			engine:         NewMockEngine(),
-			logger:         common.NewLogger(),
+			name:   "New valid storage",
+			engine: NewMockEngine(),
+			logger: func() *common.Logger {
+				logger, _ := common.NewLogger("", "")
+				return logger
+			}(),
 			expectedError:  errors.New("engine is invalid"),
 			expectedNilObj: false,
 		},
@@ -75,7 +81,8 @@ func TestStorage_Set(t *testing.T) {
 		},
 	}
 
-	storage, err := NewStorage(NewMockEngine(), common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	storage, err := NewStorage(NewMockEngine(), logger)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,7 +116,8 @@ func TestStorage_Del(t *testing.T) {
 		},
 	}
 
-	storage, err := NewStorage(NewMockEngine(), common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	storage, err := NewStorage(NewMockEngine(), logger)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/compute"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/database/compute"
 )
 
 func TestNewDatabase(t *testing.T) {
@@ -18,18 +18,24 @@ func TestNewDatabase(t *testing.T) {
 		expectedNilObj bool
 	}{
 		{
-			name:           "New database without compute layer",
-			computeLayer:   nil,
-			logger:         common.NewLogger(),
+			name:         "New database without compute layer",
+			computeLayer: nil,
+			logger: func() *common.Logger {
+				logger, _ := common.NewLogger("", "")
+				return logger
+			}(),
 			storageLayer:   NewMockStorageLayer(),
 			expectedError:  errors.New("compute is invalid"),
 			expectedNilObj: true,
 		},
 		{
-			name:           "New database without storage layer",
-			computeLayer:   NewMockComputeLayer(),
-			storageLayer:   nil,
-			logger:         common.NewLogger(),
+			name:         "New database without storage layer",
+			computeLayer: NewMockComputeLayer(),
+			storageLayer: nil,
+			logger: func() *common.Logger {
+				logger, _ := common.NewLogger("", "")
+				return logger
+			}(),
 			expectedError:  errors.New("storage is invalid"),
 			expectedNilObj: true,
 		},
@@ -106,7 +112,8 @@ func TestDatabase_HandleQuery(t *testing.T) {
 		},
 	}
 
-	database, err := NewDatabase(NewMockComputeLayer(), NewMockStorageLayer(), common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	database, err := NewDatabase(NewMockComputeLayer(), NewMockStorageLayer(), logger)
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
 )
 
 const (
@@ -35,7 +35,7 @@ func (p *Parser) Parse(request string) (Query, error) {
 	tokens := strings.Fields(request)
 
 	if len(tokens) < 2 {
-		p.logger.DLog.Printf("%s [%s]", errInvalidRequest.Error(), request)
+		p.logger.Debug("%s [%s]", errInvalidRequest.Error(), request)
 		return Query{}, errInvalidRequest
 	}
 
@@ -43,18 +43,18 @@ func (p *Parser) Parse(request string) (Query, error) {
 	switch tokens[0] {
 	case GetCommand, DelCommand:
 		if len(tokens) != 2 {
-			p.logger.DLog.Printf("%s [%s]", errInvalidArguments.Error(), request)
+			p.logger.Debug("%s [%s]", errInvalidArguments.Error(), request)
 			return Query{}, errInvalidArguments
 		}
 		query = NewQuery(tokens[0], tokens[1], "")
 	case SetCommand:
 		if len(tokens) != 3 {
-			p.logger.DLog.Printf("%s [%s]", errInvalidArguments.Error(), request)
+			p.logger.Debug("%s [%s]", errInvalidArguments.Error(), request)
 			return Query{}, errInvalidArguments
 		}
 		query = NewQuery(tokens[0], tokens[1], tokens[2])
 	default:
-		p.logger.DLog.Printf("%s [%s]", errInvalidCommand.Error(), request)
+		p.logger.Debug("%s [%s]", errInvalidCommand.Error(), request)
 		return Query{}, errInvalidCommand
 	}
 

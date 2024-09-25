@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
 )
 
 func TestNewParser(t *testing.T) {
@@ -20,8 +20,11 @@ func TestNewParser(t *testing.T) {
 			expectedError:     errors.New("logger is invalid"),
 		},
 		{
-			name:              "New parser with logger",
-			logger:            common.NewLogger(),
+			name: "New parser with logger",
+			logger: func() *common.Logger {
+				logger, _ := common.NewLogger("", "")
+				return logger
+			}(),
 			expectedNilParser: false,
 			expectedError:     nil,
 		},
@@ -139,7 +142,8 @@ func TestParser_Parse(t *testing.T) {
 		},
 	}
 
-	parser, err := NewParser(common.NewLogger())
+	logger, _ := common.NewLogger("", "")
+	parser, err := NewParser(logger)
 	if err != nil {
 		t.Errorf("want %+v; got %+v", nil, err)
 	}

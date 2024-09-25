@@ -1,3 +1,3 @@
-module sadovnikoff/go_concurrency_cource
+module github.com/sadovnikoff/GoConcurrencyCourse
 
 go 1.22.5

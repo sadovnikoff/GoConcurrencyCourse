@@ -3,8 +3,9 @@ package database
 import (
 	"errors"
 	"fmt"
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/common"
-	"github.com/sadovnikoff/GoConcurrencyCourse/homework_1/internal/database/compute"
+
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/common"
+	"github.com/sadovnikoff/GoConcurrencyCourse/homework_2/internal/database/compute"
 )
 
 type computeLayer interface {
@@ -44,11 +45,11 @@ func NewDatabase(computeLayer computeLayer, storageLayer storageLayer, logger *c
 }
 
 func (d *Database) HandleQuery(request string) (string, error) {
-	d.logger.ILog.Printf("handling request [%s]\n", request)
+	d.logger.Info("handling request [%s]", request)
 
 	query, err := d.computeLayer.Parse(request)
 	if err != nil {
-		d.logger.DLog.Printf("compute layer is incorrect")
+		d.logger.Debug("compute layer is incorrect")
 		return "", err
 	}
 
