@@ -34,7 +34,7 @@ func main() {
 			log.Printf("Error reading request: %s", err)
 		}
 
-		response, err := client.Communicate(request)
+		response, err := client.Send(request)
 		if errors.Is(err, syscall.EPIPE) {
 			log.Fatal("broken pipe (EPIPE): ", err)
 		} else if err != nil {

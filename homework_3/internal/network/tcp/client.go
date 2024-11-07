@@ -43,7 +43,7 @@ func NewClient(addr, maxBufSize string, idleTimeout time.Duration) (*Client, err
 	return client, nil
 }
 
-func (c *Client) Communicate(request string) ([]byte, error) {
+func (c *Client) Send(request string) ([]byte, error) {
 	if c.idleTimeout != 0 {
 		if err := c.conn.SetDeadline(time.Now().Add(c.idleTimeout)); err != nil {
 			return nil, fmt.Errorf("failed to set deadline for connection: %s", err)

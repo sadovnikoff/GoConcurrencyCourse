@@ -61,6 +61,7 @@ func NewLogger(level, output string) (*Logger, error) {
 func (l *Logger) Error(format string, v ...interface{}) {
 	l.eLog.Printf(format, v...)
 	if l.fd != nil {
+		// TODO need to implement log writing with buffer
 		if err := l.fd.Sync(); err != nil {
 			log.Printf("Error syncing file: %v", err)
 			l.eLog.SetOutput(os.Stderr)

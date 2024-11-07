@@ -112,6 +112,7 @@ func (s *Server) Run() {
 	}
 }
 
+// TODO decompose this function
 func (s *Server) handle(conn net.Conn) {
 	defer func() {
 		if err := conn.Close(); err != nil {

@@ -42,6 +42,8 @@ func (s *Segment) Write(data []byte) error {
 	return nil
 }
 
+// TODO decompose this function
+
 func (s *Segment) ReadAll() ([][]byte, error) {
 	files, err := os.ReadDir(s.directory)
 	if err != nil {
